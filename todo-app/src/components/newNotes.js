@@ -11,7 +11,7 @@ function NotesNew(props){
     }
     return(
         <div>
-            <h1>New notes</h1>
+            <h1 className = "header-style-1">Create a new note </h1>
             <Notes handleSubmit = {handleSubmit}/>
         </div>
     )

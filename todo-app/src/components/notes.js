@@ -3,7 +3,6 @@ import FileBase64 from 'react-file-base64'
 import {connect} from 'react-redux'
 import {Link, withRouter} from 'react-router-dom'
 import {getById} from '../selectors/getById'
-import {MdAccountCircle} from 'react-icons/md'
 
 class Notes extends React.Component{
     constructor(props){
@@ -16,7 +15,8 @@ class Notes extends React.Component{
             image: props.notes?props.notes.image:'',
             collaborators: props.notes?props.notes.collaborators:'',
             lists: props.notes?props.notes.lists:[],
-            title: props.notes?props.notes.title:''
+            title: props.notes?props.notes.title:'',
+            completed: props.notes?props.notes.completed:''
         }
     }
 
@@ -44,6 +44,20 @@ class Notes extends React.Component{
         })
     }
 
+    handleCheckbox = (title)=>[
+        // console.log('clicked the title', title)
+        this.setState((prevState)=>{
+            return{
+                lists: prevState.lists.map((list)=>{
+                    if(list.title == title){
+                        return Object.assign({}, list, {completed: !list.completed})
+                    }else{
+                        return Object.assign({}, list)
+                    }
+                })
+            }
+        })
+    ]
               
 
     handleSubmit = (e)=>{
@@ -65,23 +79,23 @@ class Notes extends React.Component{
     render(){
         return(
             <div className = "container">
-                <h2>Enter notes here</h2>
+                <h2 className = "header-style">Enter notes here</h2>
                 <form onSubmit = {this.handleSubmit} className = "container form-style">
                 <div className ="form-outline mb-4">
-                    <label htmlFor = "title" className="form-label">title : </label>
+                    <label htmlFor = "title" className="form-label text-style">title : </label>
                     <input 
                         type = "text"
                         id="form4Example1" 
-                        className="form-control" 
+                        className="form-control inner-text-style" 
                         placeholder = "Enter the  title"
                         name = "head"
                         value = {this.state.head}
                         onChange = {this.handleChange}/>
                 </div>
                 <div className="form-outline mb-4 ">
-                    <label htmlFor = "note" className="form-label">Note </label>
+                    <label htmlFor = "note" className="form-label text-style">Note </label>
                     <textarea 
-                        className ="form-control" 
+                        className ="form-control inner-text-style" 
                         id="form4Example3" 
                         rows="4" 
                         name = "note" 
@@ -99,7 +113,12 @@ class Notes extends React.Component{
                 <ol>
                     {
                         this.state.lists.map((list)=>{
-                            return <li key = {list.title}>{list.title}</li>
+                            return <li key = {list.title} className = "checkmark-input">{list.title}
+                                    <input type = "checkbox"
+                                        checked = {list.completed}
+                                        onChange = {()=>{this.handleCheckbox(list.title)}}
+                                        className = "checkmark"/>  
+                                   </li>
                         })
                     }
                     </ol>
@@ -111,7 +130,7 @@ class Notes extends React.Component{
                                 type = "text"
                                 placeholder = "Add list"
                                 name = "title"
-                                className = "form-control"
+                                className = "form-control inner-text-style"
                                 value = {this.state.title}
                                 onChange = {this.handleChange}/>
                         </div> 
@@ -125,27 +144,28 @@ class Notes extends React.Component{
                 
                 <div className = "row">
                     <div className = "col-md-8">
-                        <label htmlFor = "image">image : </label><br/>
+                        <label htmlFor = "image" className="form-label text-style">image : </label><br/>
                         {
                             this.state.image.length > 0 ?   (<div><img src={this.state.image} alt = "todo" className = "image-style"/></div>): ''
                         }
                         <FileBase64
                             multiple={ true }
-                            onDone={ this.getFiles.bind(this)} />
+                            onDone={ this.getFiles.bind(this)} 
+                            className = "form-control inner-text-style"/>
                     </div>
                     <div className = "col-md-4">
                         <div className="form-outline mb-4">
-                            <label htmlFor = "collaborators" className="form-label">collaborators : </label>
+                            <label htmlFor = "collaborators" className="form-label text-style">collaborators : </label>
                             <div className = "input-icons">
                             <i className="fa fa-user icon"></i>
                             <input 
-                            type = "text"
-                            id = "form4Example2"
-                            className = "form-control input-field"
-                            placeholder = "add collaborators"
-                            name = "collaborators"
-                            value = {this.state.collaborators}
-                            onChange = {this.handleChange}
+                                type = "text"
+                                id = "form4Example2"
+                                className = "form-control input-field inner-text-style"
+                                placeholder = "add collaborators"
+                                name = "collaborators"
+                                value = {this.state.collaborators}
+                                onChange = {this.handleChange}
                             />
                 </div>
                 </div>
@@ -154,13 +174,13 @@ class Notes extends React.Component{
                     {/* collaborators */}
                     
                     
-                    <button type="submit" className="btn btn-primary btn-block mb-4">Submit</button>
+                    <button type="submit" className="btn btn-primary mb-8">Submit</button>
                     {/* <input 
                         type = "submit"
                         value = "submit"/> */}
                 </form>
                 <br/>
-                <Link to = "/notes">back</Link>
+                <Link to = "/notes" className = "back-style">Click here to view all notes!</Link>
             </div>
         )
     }

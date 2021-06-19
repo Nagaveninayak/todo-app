@@ -19,6 +19,9 @@ const notesSchema = new Schema({
     lists: [{
         title : {
             type: String
+        },
+        completed: {
+            type: Boolean
         }
     }]
 })

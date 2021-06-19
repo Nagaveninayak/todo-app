@@ -55,7 +55,7 @@ export const startEditNotes = (formData, id)=>{
         axios.put(`/notes/${id}`, formData)
             .then((response)=>{
                 dispatch(editNotes(response.data))
-                window.location.href = `/notes/${id}`
+                window.location.href = `/notes`
             })
     }
 }
